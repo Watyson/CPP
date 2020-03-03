@@ -1,0 +1,84 @@
+#include<iostream>
+#include<queue>
+#include<set>
+using namespace std;
+
+static int matriz[150][150], M=0, N=0, instancias=0, gradeH=0, gradeV=0, qtdAgua=0, posX=0, posY=0;
+static pair<int,int> valor(0,0);
+
+//================== Modulo de um numero ==================
+int modulo(int n)
+{
+	return n<0 ? n*-1 : n;
+}
+
+//================== Posição que eu quero visitar =========
+bool podeIr(int &c, int &d)
+{
+	return matriz[c][d] && (c>=0 && d>=0) && (c<gradeH && d<gradeV);
+}
+
+//================== Resolução do problema (BFS) ===========
+pair<int,int> bfs(int x=0, int y=0)
+{
+	int i=0, cont=0;
+	pair<int,int> saida(0,0);	//Par, Impar
+	queue<pair<int,int> > fila;
+	set<pair<int,int> > verificados;
+
+	int vetor1[8]={M, N, -M, -N,  M,  N, -M, -N};	//Combinação de posições possiveis
+	int vetor2[8]={N, M, -N, -M, -N, -M,  N,  M};
+
+	fila.push(pair<int,int>(x,y));
+	matriz[x][y]=2;
+	while(!fila.empty())
+	{
+		valor=fila.front();
+		fila.pop();
+
+		for(i=0, cont=0; i<8; ++i)
+		{
+			posX=valor.first -vetor1[i];
+			posY=valor.second-vetor2[i];
+
+			if(podeIr(posX, posY) && verificados.find(pair<int,int>(posX,posY))==verificados.end())
+			{
+				if(matriz[posX][posY]==1)
+				{
+					fila.push(pair<int,int>(posX,posY));
+				}
+				matriz[posX][posY]=2;
+				verificados.insert(pair<int,int>(posX,posY));
+				++cont;
+			}
+		}
+		cont%2 ? ++saida.second : ++saida.first;
+		verificados.clear();
+	}
+	return saida;
+}
+
+int main()
+{
+	scanf("%d",&instancias);
+	for(int i=1, j=0, k=0; i<=instancias; ++i)
+	{
+		scanf("%d %d %d %d %d", &gradeH, &gradeV, &M, &N, &qtdAgua);
+
+		//========= Zerar matriz =========
+		for(j=0; j<gradeH; ++j)
+		{
+			for(k=0; k<gradeV; matriz[j][k]=1, ++k);
+		}
+
+		//========= locais alagados ======
+		for(j=0; j<qtdAgua; ++j)
+		{
+			scanf("%d %d", &posX, &posY);
+			matriz[posX][posY]=0;
+		}
+
+		valor=bfs();
+		printf("Case %d: %d %d\n", i, valor.first, valor.second);
+	}
+}
