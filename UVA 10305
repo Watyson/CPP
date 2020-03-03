@@ -1,0 +1,53 @@
+#include<iostream>
+#include<vector>
+#include<stack>
+using namespace std;
+
+static vector<int> adjList[110];
+static bool verificados[110];
+static stack<int> saida;
+
+// ========= Dfs com ordenação topologica =========
+void dfs(int &x)
+{
+	verificados[x]=true;
+	for(unsigned i=0; i<adjList[x].size(); ++i)
+	{
+		if(!verificados[adjList[x][i]])
+		{
+			dfs(adjList[x][i]);
+		}
+	}
+	saida.push(x);
+}
+
+int main()
+{
+	int i=0, qtdTarefas=0, instancias=0, tar0=0, tar1=0;
+
+	// ========= Leitura dos dados =========
+	scanf("%d %d", &qtdTarefas, &instancias);
+	while(qtdTarefas || instancias)
+	{
+		for(i=1; i<=qtdTarefas; verificados[i]=false, adjList[i].clear(), ++i);
+		for(i=0; i<instancias; ++i)
+		{
+			scanf("%d %d", &tar0, &tar1);
+			adjList[tar0].push_back(tar1);
+		}
+
+		// ========= Ordenar =========
+		for(i=1; i<=qtdTarefas; ++i)
+		{
+			if(!verificados[i])
+			{
+				dfs(i);
+			}
+		}
+
+		// ========= Mostrar resultado =========
+		for(printf("%d", saida.top()), saida.pop(); saida.size(); printf(" %d", saida.top()), saida.pop());
+		printf("\n");
+		scanf("%d %d", &qtdTarefas, &instancias);
+	}
+}
