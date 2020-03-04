@@ -1,0 +1,36 @@
+#include<iostream>
+using namespace std;
+
+int main()
+{
+	int i=0, qtdAero=0, qtdVoos=0, aeroA=0, aeroB=0, maior=0;
+	pair<int,int> grau[110];
+
+	for(int j=1; scanf("%d %d", &qtdAero, &qtdVoos), qtdAero && qtdVoos; ++j, maior=0)
+	{
+		for(i=1; i<=qtdAero; grau[i]=pair<int,int>(0,i), ++i);
+
+		// ========= Leio os dados e conto o grau =========
+		for(i=0; i<qtdVoos; ++i)
+		{
+			scanf("%d %d", &aeroA, &aeroB);
+
+			grau[aeroA].first++;
+			grau[aeroB].first++;
+
+			if(grau[aeroA].first>maior){maior=grau[aeroA].first;}
+			if(grau[aeroB].first>maior){maior=grau[aeroB].first;}
+		}
+
+		// ========= Mostro os resultados =========
+		printf("Teste %d\n", j);
+		for(i=1; i<=qtdAero; ++i)
+		{
+			if(grau[i].first==maior)
+			{
+				printf("%d ", grau[i].second);
+			}
+		}
+		printf("\n\n");
+	}
+}
