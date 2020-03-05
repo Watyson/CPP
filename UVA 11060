@@ -1,0 +1,68 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include<map>
+using namespace std;
+
+int main()
+{
+	int i=0, k=0, qtdBebidas=0, instancias=0, atual=0;
+	string bebidaA="", bebidaB="", mapaIS[110];
+
+	vector<int> grafo[110];
+	int grau[110];
+	priority_queue<int, vector<int>, greater<int>> saida;
+
+	map<string,int> mapaSI;
+	map<string,int>::iterator itMapaSI;
+
+	for(k=1; scanf("%d ", &qtdBebidas)!=EOF; ++k)
+	{
+		// ========= Leitura de dados =========
+		for(i=0; i<qtdBebidas; ++i)
+		{
+			cin>>bebidaA;
+			grau[i]=0;
+
+			mapaSI[bebidaA]=i;
+			mapaIS[i]=bebidaA;
+		}
+
+		scanf("%d ", &instancias);
+		for(i=0; i<instancias; ++i)
+		{
+			cin>>bebidaA>>bebidaB;
+
+			itMapaSI=mapaSI.find(bebidaB);
+			grafo[mapaSI.find(bebidaA)->second].push_back(itMapaSI->second);
+			grau[itMapaSI->second]++;
+		}
+
+		// ========= Ordenação topologica =========
+		for(i=0; i<qtdBebidas; ++i)
+		{
+			if(!grau[i]){saida.push(i);}
+		}
+
+		printf("Case #%d: Dilbert should drink beverages in this order:", k);
+		while(!saida.empty())
+		{
+			atual=saida.top();
+			saida.pop();
+
+			for(unsigned j=0; j<grafo[atual].size(); ++j)
+			{
+				--grau[grafo[atual][j]];
+				if(!grau[grafo[atual][j]])
+				{
+					saida.push(grafo[atual][j]);
+				}
+			}
+			cout<<' '<<mapaIS[atual];
+		}
+		printf(".\n\n");
+
+		mapaSI.clear();
+		for(i=0; i<qtdBebidas; grafo[i].clear(), ++i);
+	}
+}
