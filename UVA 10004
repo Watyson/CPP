@@ -1,0 +1,59 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+using namespace std;
+
+static vector<int> adjList[210];
+static vector<int> cor(210,-1);
+
+bool bipartido(int x)
+{
+	int atual=0;
+	unsigned i=0;
+	bool eBipartido=true;
+
+	queue<int> fila;
+	fila.push(x);
+	cor[ (unsigned) x]=0;
+
+	while(!fila.empty() && eBipartido)
+	{
+		atual=fila.front();
+		fila.pop();
+
+		for(i=0; i<adjList[atual].size() && eBipartido; ++i)
+		{
+			if(cor[ (unsigned) adjList[atual][i]]<0)
+			{
+				cor[ (unsigned) adjList[atual][i]]= 1 - cor[ (unsigned) atual];
+				fila.push(adjList[atual][i]);
+			}
+			else if(cor[ (unsigned) adjList[atual][i]]==cor[ (unsigned) atual])
+			{
+				eBipartido=false;
+			}
+		}
+	}
+	return eBipartido;
+}
+
+int main()
+{
+	int i=0, n=0, arestas=0, a=0, b=0;
+
+	while(scanf("%d", &n) && n)
+	{
+		scanf("%d", &arestas);
+		for(i=0; i<arestas; ++i)
+		{
+			scanf("%d %d", &a, &b);
+			adjList[a].push_back(b);
+			adjList[b].push_back(a);
+		}
+
+		if(bipartido(0)){printf("BICOLORABLE.\n");}
+		else			{printf("NOT BICOLORABLE.\n");}
+		
+		for(i=0; i<n; cor[ (unsigned) i]=-1, adjList[i].clear(), ++i);
+	}
+}
