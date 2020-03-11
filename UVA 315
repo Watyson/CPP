@@ -1,0 +1,62 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+
+static int cont=0, raiz=0, raizFilho=0, menor[110], num[110], parente[110];
+static bool vertex[110];
+static vector<int> adjList[110];
+
+void dfsVertex(int x)
+{
+	menor[x]=num[x]=cont++;
+	for(unsigned i=0; i<adjList[x].size(); ++i)
+	{
+		if(!num[adjList[x][i]])
+		{
+			parente[adjList[x][i]]=x;
+
+			if(x==raiz){++raizFilho;}// Caso especial, se x == raiz
+
+			dfsVertex(adjList[x][i]);
+
+			if(menor[adjList[x][i]]>=num[x]){vertex[x]=true;}// Se é ponto de articulação
+
+			menor[x]=min(menor[x],menor[adjList[x][i]]);
+		}
+		else if(adjList[x][i] != parente[x]){menor[x]=min(menor[x],num[adjList[x][i]]);}
+	}
+}
+
+int main()
+{
+	int vertices=0, i=0, a=0, b=0;
+	char aux=' ';
+
+	while(scanf("%d", &vertices)!=EOF && vertices)
+	{
+		for(i=1; i<=vertices; menor[i]=num[i]=parente[i]=0, vertex[i]=false, adjList[i].clear(), ++i);
+		while(scanf("%d", &a)!=EOF && a)
+		{
+			while(scanf("%c", &aux)!=EOF && aux==' ')
+			{
+				scanf("%d", &b);
+				adjList[a].push_back(b);
+				adjList[b].push_back(a);
+			}
+		}
+
+		for(i=1; i<=vertices; ++i)
+		{
+			if(!num[i])
+			{
+				raiz=i;
+				raizFilho=0;
+				cont=1;
+				dfsVertex(i);
+				vertex[raiz]=raizFilho>1;
+			}
+		}
+		printf("%lld\n", count(vertex+1, vertex+vertices+1, true));
+	}
+}
