@@ -1,0 +1,75 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+static int cont=0, menor[10010], num[10010], parente[10010], grau[10010];
+static vector<int> adjList[10010];
+static vector<pair<int,int>> estacoesAlvo;
+static vector<pair<int,int>>::iterator it;
+
+void clear(int vertices)
+{
+	for(int i=0; i<=vertices; menor[i]=num[i]=parente[i]=0, grau[i]=1, adjList[i].clear(), ++i);
+	estacoesAlvo.clear();
+}
+
+void pontosAlvos(int x)
+{
+	menor[x]=num[x]=cont++;
+	for(unsigned i=0; i<adjList[x].size(); ++i)
+	{
+		if(!num[adjList[x][i]])
+		{
+			parente[adjList[x][i]]=x;
+
+			pontosAlvos(adjList[x][i]);
+
+			if(menor[adjList[x][i]]>=num[x]){++grau[x];}// Pombos
+			menor[x]=min(menor[x],menor[adjList[x][i]]);
+		}
+		else if(adjList[x][i] != parente[x]){menor[x]=min(menor[x],num[adjList[x][i]]);}
+	}
+}
+
+bool ordenar(pair<int,int> a, pair<int,int> b)
+{
+	return a.second>b.second || (a.second==b.second&&a.first<b.first);
+}
+
+int main()
+{
+	int i=0, estacoes=0, alvos=0, a=0, b=0;
+
+	while(scanf("%d %d", &estacoes, &alvos), estacoes&&alvos)
+	{
+		clear(estacoes);
+
+		while(scanf("%d %d", &a, &b), a>=0 && b>=0)
+		{
+			adjList[a].push_back(b);
+			adjList[b].push_back(a);
+		}
+
+		for(i=0; i<estacoes; ++i)
+		{
+			if(!num[i])
+			{
+				cont=1;
+				pontosAlvos(i);
+			}
+		}
+
+		for(i=0, --grau[0]; i<estacoes; ++i)
+		{
+			estacoesAlvo.push_back(pair<int,int>(i,grau[i]));
+		}
+
+		sort(estacoesAlvo.begin(), estacoesAlvo.end(), ordenar);
+		for(it=estacoesAlvo.begin(), i=0; it!=estacoesAlvo.end()&&i<alvos; ++it, ++i)
+		{
+			printf("%d %d\n", it->first, it->second);
+		}
+		printf("\n");
+	}
+}
