@@ -1,0 +1,75 @@
+#include<iostream>
+#include<vector>
+#include<set>
+using namespace std;
+
+static int cont=0, menor[110], num[110], parente[110];
+static vector<int> adjList[110];
+static set<pair<int,int>> pontes;
+static set<pair<int,int>>::iterator it;
+
+void clear(int vertices)
+{
+	for(int i=0; i<=vertices; menor[i]=num[i]=parente[i]=0, adjList[i].clear(), ++i);
+	pontes.clear();
+}
+
+void criticalLinks(int x)
+{
+	menor[x]=num[x]=cont++;
+	for(unsigned i=0; i<adjList[x].size(); ++i)
+	{
+		if(!num[adjList[x][i]])
+		{
+			parente[adjList[x][i]]=x;
+
+			criticalLinks(adjList[x][i]);
+
+			if(menor[adjList[x][i]]>num[x])// Encontrou uma ponte
+			{
+				pontes.insert(pair<int,int>(min(x,adjList[x][i]),max(x,adjList[x][i])));
+			}
+
+			menor[x]=min(menor[x],menor[adjList[x][i]]);
+		}
+		else if(adjList[x][i] != parente[x]){menor[x]=min(menor[x],num[adjList[x][i]]);}
+	}
+}
+
+int main()
+{
+	int i=0, j=0, instancias=0, a=0, b=0, conexoes=0;
+
+	while(scanf("%d", &instancias)!=EOF)
+	{
+		for(i=0; i<instancias; ++i)
+		{
+			scanf("%d (%d)", &a, &conexoes);
+			for(j=0; j<conexoes; ++j)
+			{
+				scanf("%d", &b);
+
+				adjList[a].push_back(b);
+				adjList[b].push_back(a);
+			}
+		}
+
+		for(i=0; i<instancias; ++i)
+		{
+			if(!num[i])
+			{
+				cont=1;
+				criticalLinks(i);
+			}
+		}
+
+		printf("%llu critical links\n", pontes.size());
+		for(it=pontes.begin(); it!=pontes.end(); ++it)
+		{
+			printf("%d - %d\n",it->first, it->second);
+		}
+		printf("\n");
+
+		clear(instancias);
+	}
+}
