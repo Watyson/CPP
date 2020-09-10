@@ -1,0 +1,23 @@
+#include<iostream>
+#include<math.h>
+
+int main()
+{
+	int i=0, j=0, insc=0, meta=0, dias=0, ultM[30], pos=0, aux=0;
+	double media=0;
+
+	scanf("%d %d", &insc, &meta);
+	for( ; i<30; scanf("%d", &ultM[i]), media+=ultM[i++]);
+
+	for( ; insc < meta; ++dias, ++j)
+	{
+		pos = j%30;
+		aux = ultM[pos];
+
+		ultM[pos] = int (ceil(media/30));
+		insc += ultM[pos];
+
+		media = media - aux + ultM[pos];
+	}
+	printf("%d\n", dias);
+}
