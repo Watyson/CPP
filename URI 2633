@@ -1,0 +1,34 @@
+#include<iostream>
+#include<set>
+
+int main()
+{
+	int inst=0, i=0;
+	std::string saida;
+	std::pair<int,std::string> ler;
+	std::set<std::pair<int,std::string>> pecas;
+	std::set<std::pair<int,std::string>>::iterator it, aux;
+
+	while(scanf("%d", &inst) != EOF)
+	{
+		for(i=0; i < inst; ++i)
+		{
+			std::cin.ignore();
+			std::cin>>ler.second;
+			scanf("%d", &ler.first);
+
+			pecas.insert(ler);
+		}
+
+		aux=pecas.end();
+		--aux;
+		for(it=pecas.begin(); it!=pecas.end(); ++it)
+		{
+			saida+=it->second;
+			it == aux ? saida+='\n' : saida+=' ';
+		}
+
+		pecas.clear();
+	}
+	std::cout<<saida;
+}
