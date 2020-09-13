@@ -1,5 +1,4 @@
 #include<iostream>
-#include<math.h>
 
 int main()
 {
@@ -14,7 +13,7 @@ int main()
 		pos = j%30;
 		aux = ultM[pos];
 
-		ultM[pos] = int (ceil(media/30));
+		ultM[pos] = int ((media/30) + 0.9999999999);
 		insc += ultM[pos];
 
 		media = media - aux + ultM[pos];
