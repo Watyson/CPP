@@ -1,0 +1,32 @@
+#include<iostream>
+using namespace std;
+
+pair<int,int> fibonacci(int n, pair<int,int> *pd)
+{
+	if(n == 1 || !n)		return pair<int,int> (n,1);
+	if(pd[n].first != -1)	return pair<int,int> (pd[n].first, pd[n].second);
+
+	pair<int, int> a = fibonacci(n-1, pd);
+	pair<int, int> b = fibonacci(n-2, pd);
+
+	pd[n-1] = a;
+	pd[n-2] = b;
+
+	return pair<int,int> (a.first+b.first, a.second+b.second+1);
+}
+
+int main()
+{
+	int cont=0, i=0, num=0;
+	pair<int,int> saida(0,0), pd[40]; // Resultado;Chamadas recursivas
+
+	for(i=0; i<40; pd[i] = pair<int,int>(-1,-1), ++i);
+
+	scanf("%d", &cont);
+	for(i=0; i<cont; ++i)
+	{
+		scanf("%d", &num);
+		saida = fibonacci(num, pd);
+		printf("fib(%d) = %d calls = %d\n", num, saida.second-1, saida.first);
+	}
+}
