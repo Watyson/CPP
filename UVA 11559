@@ -1,0 +1,40 @@
+#include<iostream>
+using namespace std;
+
+bool existeVaga(int *v, int t, int qtdMin){
+	for(int i=0; i<t; ++i){
+		if(*(v+i) >= qtdMin) return true;
+	}
+	return false;
+}
+
+int main()
+{
+	int i=0, j=0;
+	int numParticipantes=0, orcamento=0, numHoteis=0, numSemanas=0, saida=999999999, aux=0;
+	int vagaHotel[19][14], precoHotel[19];
+
+	while(scanf("%d", &numParticipantes) != EOF)
+	{
+		scanf("%d %d %d", &orcamento, &numHoteis, &numSemanas);
+		for(i=0,j=0; i<numHoteis; ++i)
+    {
+			scanf("%d", (precoHotel+i));
+			for(j=0; j<numSemanas; ++j)
+				scanf("%d", &vagaHotel[i][j]);
+		}
+
+		// ========= Solucao =========
+		for(i=0, j=0, saida=999999999; i<numHoteis; ++i){
+			aux = *(precoHotel+i) * numParticipantes;
+			if(orcamento >= aux && existeVaga(vagaHotel[i], numSemanas, numParticipantes) && aux < saida){
+				saida=aux;
+			}
+		}
+		// ===========================
+
+		if(saida != 999999999) printf("%d\n", saida);
+		else printf("stay home\n");
+	}
+	return 0;
+}
