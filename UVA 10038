@@ -1,0 +1,33 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int absoluto(int n) {return (n<0 ? n*-1 : n);}
+void zerarVetor(int *vetor, int t) {for(int i=0; i<t; vetor[i++]=0);}
+bool eJolly(int num, int n) {return num<n && n;}
+
+int main()
+{
+	int i=0, n=0, aux=0, vetor[3002], jolly[3002];
+
+	while(scanf("%d", &n) != EOF)
+	{
+		for(i=0; i<n; ++i)
+		{
+			scanf("%d", &vetor[i]);
+		}
+
+		// ========= Solucao =========
+		zerarVetor(jolly, n);
+		for(i=1; i<n; ++i)
+		{
+			aux = absoluto(vetor[i-1]-vetor[i]);
+			if(eJolly(aux, n)){jolly[aux]++;}
+		}
+		for(i=1; i<n && jolly[i]; ++i);
+		// ===========================
+
+		if(i != n)	{printf("Not jolly\n");}
+		else		{printf("Jolly\n");}
+	}
+}
