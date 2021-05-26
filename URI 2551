@@ -1,0 +1,18 @@
+#include <iostream>
+using namespace std;
+
+int main(){
+	short n=0, i=0;
+	double t=0, d=0, aux1=0, aux2=0;
+	while(scanf("%hd", &n) != EOF){
+		for(i=1; i<=n; ++i){
+			scanf("%lf %lf", &t, &d);
+			aux1=d/t;
+			if(aux1 > aux2){
+				aux2=aux1;
+				printf("%d\n", i);
+			}
+		}
+		aux1=aux2=0;
+	}
+}
