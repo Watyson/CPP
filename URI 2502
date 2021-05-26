@@ -1,0 +1,58 @@
+#include <iostream>
+#include <map>
+using namespace std;
+
+bool isUpperCase(char a){return a>='A' && a<='Z';}
+bool isLowerCase(char a){return a>='a' && a<='z';}
+bool isLetter(char a) {return isUpperCase(a) || isLowerCase(a);}
+
+char lowerCase(char a){return isLowerCase(a) || !isLetter(a) ? a : char(a+32);}
+char upperCase(char a){return isUpperCase(a) || !isLetter(a) ? a : char(a-32);}
+
+int main(){
+	unsigned c=0, n=0, i=0, j=0;
+	char vChar[110], aux;
+	string linha;
+	map<char, char> v;
+	map<char, char>::iterator it1, it2;
+
+	while(scanf("%hd %hd ", &c, &n) != EOF){
+		for(i=0; i<c; ++i){
+			scanf("%c", &aux);
+			vChar[i]=aux;
+		}
+		scanf(" ");
+
+		for(i=0; i<c; ++i){
+			scanf("%c", &aux);
+			v[vChar[i]]=aux;
+			v[aux]=vChar[i];
+		}
+		scanf(" ");
+
+		for(i=0; i<n; ++i){
+			getline(cin, linha);
+
+			for(j=0; j< linha.size(); ++j){
+				if(isLetter(linha[j])){
+					it1 = v.find(upperCase(linha[j]));
+					it2 = v.find(lowerCase(linha[j]));
+
+					bool a = it1 != v.end();
+					bool b = it2 != v.end();
+
+					if(a && b)			isUpperCase(linha[j]) ? linha[j] = it1->second: linha[j] = it2->second;
+					else if(a && !b)	isUpperCase(linha[j]) ? linha[j] = it1->second: linha[j] = lowerCase(it1->second);
+					else if(!a && b)	isUpperCase(linha[j]) ? linha[j] = it1->second: linha[j] = lowerCase(it1->second);
+				}
+				else{
+					it1 = v.find(linha[j]);
+					if(it1 != v.end())	linha[j] = lowerCase(it1->second);
+				}
+			}
+			cout<<linha<<'\n';
+		}
+		printf("\n");
+		v.clear();
+	}
+}
