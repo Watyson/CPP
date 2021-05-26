@@ -1,0 +1,25 @@
+#include <iostream>
+using namespace std;
+
+short abs(short a) {return a ? a : a*-1;}
+
+int main(){
+	short m=0, n=0, i=0, j=0, matriz[110][110];
+	pair<short, short> pT(0,0), pA(0,0), pM(0,0);
+
+	while(scanf("%hd %hd", &m, &n) != EOF){
+		for(i=0; i<m; ++i){
+			for(j=0; j<n; ++j){
+				scanf("%d", &matriz[i][j]);
+
+				if(matriz[i][j]){
+					if(matriz[i][j] == 1)	pT = pair<short, short>(i, j);
+					else					pA = pair<short, short>(i, j);
+				}
+			}
+		}
+		pM = pair<short, short>(pT.first, pA.second);
+
+		printf("%hd\n", abs(pA.first-pM.first)+abs(pT.second-pM.second));
+	}
+}
