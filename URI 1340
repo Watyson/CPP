@@ -1,0 +1,63 @@
+#include <iostream>
+#include <queue>
+#include <stack>
+using namespace std;
+
+int main(){
+	int ct=0, i=0, action=0, num=0;
+	bool is_queue=true, is_stack=true, is_priority_queue=true;
+	string output;
+
+	queue<int> queue;
+	stack<int> stack;
+	priority_queue<int> priority_queue;
+
+	while(scanf("%d", &ct) != EOF){
+		for(i=0; i<ct; ++i){
+			scanf("%d %d", &action, &num);
+			if(action == 1){
+				queue.push(num);
+				stack.push(num);
+				priority_queue.push(num);
+			}
+			else{
+				if(queue.front() != num)
+					is_queue = false;
+				if(stack.top() != num)
+					is_stack = false;
+				if(priority_queue.top()!= num)
+					is_priority_queue = false;
+
+				queue.pop();
+				stack.pop();
+				priority_queue.pop();
+			}
+		}
+
+		if((is_queue && is_stack) || (is_queue && is_priority_queue) || (is_stack && is_priority_queue)){
+			printf("not sure\n");
+		}
+		else if(is_queue || is_stack || is_priority_queue){
+			if(is_queue){
+				printf("queue\n");
+			}
+			else if(is_stack){
+				printf("stack\n");
+			}
+			else{
+				printf("priority queue\n");
+			}
+		}
+		else{
+			printf("impossible\n");
+		}
+
+		is_queue = is_stack = is_priority_queue = true;
+		while(!queue.empty())
+			{queue.pop();}
+		while(!stack.empty())
+			{stack.pop();}
+		while(!priority_queue.empty())
+			{priority_queue.pop();}
+	}
+}
