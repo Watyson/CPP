@@ -1,0 +1,38 @@
+#include <iostream>
+#include <queue>
+using namespace std;
+
+int func_dir(string a){
+	if(a[1] == '2') return 2;
+	if(a[1] == '3') return 1;
+	return a[1] - 49;
+}
+
+bool func_space(queue<std::string> a[4]){
+	return (a[0].size() + a[1].size() + a[2].size() + a[3].size()) == 1;
+}
+
+int main(){
+	int dir, i=0;
+	std::string id, aux;
+	queue<std::string> pc[4];
+
+	cin>>aux;
+	while(aux[0] == '-'){
+		dir = func_dir(aux);
+		while(cin>>id, id[0] == 'A'){
+			pc[dir].push(id);
+		}
+		aux = id;
+	}
+
+	while(!pc[0].empty() || !pc[1].empty() || !pc[2].empty() || !pc[3].empty()){
+		for(i=0; i<4; ++i){
+			if(!pc[i].empty()){
+				cout<<pc[i].front();
+				func_space(pc) ? printf("\n") : printf(" ");
+				pc[i].pop();
+			}
+		}
+	}
+}
