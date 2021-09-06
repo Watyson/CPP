@@ -1,0 +1,43 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+struct vetor{
+	int vetor[1010];
+	int size=0;
+};
+
+int compare(vetor v1, vetor v2){
+	int count = 0;
+	
+	for(int i=0; i<v1.size; ++i){
+		if(v1.vetor[i] == v2.vetor[i]){
+			count++;
+		}
+	}
+	return count;
+}
+
+bool order(int a, int b){
+	return a > b;
+}
+
+int main(){
+	int ct=0, i=0, j=0, p=0;
+	vetor v1, v2;
+	
+	scanf("%d", &ct);
+	for(j=0; j<ct; ++j){
+
+		scanf("%d", &p);
+		v1.size = v2.size = p;
+		for(i=0; i<p; ++i){
+			scanf("%d", &v1.vetor[i]);
+			v2.vetor[i] = v1.vetor[i];
+		}
+		
+		sort(v2.vetor, v2.vetor+v2.size, order);
+
+		printf("%d\n", compare(v1, v2));
+	}
+}
