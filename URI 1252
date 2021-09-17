@@ -1,0 +1,42 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+int n;
+int absolute(int a){
+	return a<0 ? a*-1: a;
+}
+
+bool compare(int a, int b){
+	int c = a%n;
+	int d = b%n;
+	
+	if(c == d){						// Primeiro impar, depois par
+		int absA = absolute(a)%2;	// Se é par/impar
+		int absB = absolute(b)%2;	// Se é par/impar
+		
+		if(absA == absB){			// Se os dois são par/impar
+			return a%2 ? a>b : b>a;	// Se são par senão são impar
+		}
+		return absA > absB;			// Impar antes do par
+	}
+	return c < d;
+}
+
+int main(){
+	int m, i, vector[10010];
+	
+	while(scanf("%d %d", &m, &n), m){
+		for(i=0; i<m; ++i){
+			scanf("%d", &vector[i]);
+		}
+		
+		sort(vector, vector+m, compare);
+		
+		printf("%d %d\n", m, n);
+		for(i=0; i<m; ++i){
+			printf("%d\n", vector[i]);
+		}
+	}
+	printf("0 0\n");
+}
