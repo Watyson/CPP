@@ -1,0 +1,68 @@
+#include<iostream>
+#include<stack>
+using namespace std;
+
+template<typename t>
+t pop_stack(stack<t> &s){
+	t a = s.top();
+	s.pop();
+	return a;
+}
+
+bool is_letter(char a)		{return (a > 64 and a < 91) or (a > 96 and a < 123);}
+bool is_number(char a)		{return a > 47 and a < 58;}
+bool is_variable(char a)	{return is_letter(a) || is_number(a);}
+bool is_operator(char a)	{return a == '+' || a == '-' || a == '*' || a == '/' || a == '^';}
+
+int priority(char a){
+	if(a == '^')			return 3;
+	if(a == '*' || a == '/')return 2;
+	if(a == '+' || a == '-')return 1;
+	return 0;
+}
+
+string infixToSufix(string expression){
+	char character;
+	string out;
+	stack<char> operators;
+
+	for(unsigned i=0; i<expression.size(); ++i){
+		character = expression[i];
+
+		if(is_variable(character)){
+			out += character;
+		}
+		else if(is_operator(character)){
+			while(!operators.empty() and (priority(character) <= priority(operators.top()))){
+				out += pop_stack(operators);
+			}
+			operators.push(character);
+		}
+		else if(character == '('){
+			operators.push('(');
+		}
+		else if(character == ')'){
+			while(operators.top() != '('){
+				out += pop_stack(operators);
+			}
+			operators.pop();
+		}
+	}
+
+	while(!operators.empty()){
+		out += pop_stack(operators);
+	}
+
+	return out;
+}
+
+int main(){
+	int tc;
+	string expression;
+
+	scanf("%d", &tc);
+	for(int i=0; i<tc; ++i){
+		cin>>expression;
+		cout<<infixToSufix(expression)<<'\n';
+	}
+}
