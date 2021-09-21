@@ -34,9 +34,9 @@ int main(){
 		diference.first  = subtraction(every_move.first, it->second);
 		diference.second = subtraction(every_move.second, it->second);
 
-		if	(diference.first == diference.second)				printf("%lld %lld E\n", it->first, it->second);
-		else if	(diference.first == 0 or (diference.first < diference.second))	printf("%lld %lld G\n", it->first, it->second);
-		else									printf("%lld %lld D\n", it->first, it->second);
+		if	(diference.first == diference.second)	printf("%lld %lld E\n", it->first, it->second);
+		else if	(diference.first < diference.second)	printf("%lld %lld G\n", it->first, it->second);
+		else						printf("%lld %lld D\n", it->first, it->second);
 
 		map.clear();
 	}
