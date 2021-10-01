@@ -1,43 +1,48 @@
 #include<iostream>
-#include<map>
+#include<algorithm>
 using namespace std;
 using ll = long long;
-using ull = unsigned long long;
+using pair_ll = pair<long long, long long>;
 
-ll max(ll &a, ll &b)		{return a > b ? a : b;}
-ll min(ll &a, ll &b)		{return a < b ? a : b;}
 ll subtraction(ll &a, ll &b)	{return max(a, b) - min(a, b);}
 
+ll counter(ll *vector, ll &vector_size, ll &drawn_position, ll &element){
+	ll out=1, i=0;
+	for(i=drawn_position-2; i>=0			and vector[i]==element; ++out, --i);
+	for(i=drawn_position;	i<vector_size	and vector[i]==element; ++out, ++i);
+	return out;
+}
+
 int main(){
-	ull vector_size;
-	ll test_case, i, j, drawn_element;
-	pair<ll, ll> subvector_extreme;	// First = Less, second = Greater
-	pair<ll, ll> every_move;	// First = Gugu, second = Dadriel
-	pair<ll, ll> diference;		// First = Gugu, second = Dadriel
-	map<ll, ll>::iterator it;
-	map<ll, ll> map;
+	ll i, j, test_case, vector_size, drawn_position, element, count;
+	pair_ll subvector_pos;	// First = Less, second = Greater
+	pair_ll every_move;		// First = Gugu, second = Dadriel
+	pair_ll diference;		// First = Gugu, second = Dadriel
 
 	scanf("%llu %lld", &vector_size, &test_case);
-	ll vector[vector_size];
-	for(i=0; i<vector_size; scanf("%lld", &vector[i]), ++i);
+	ll vector[vector_size], subvector[vector_size];
+	for(i=0; i<vector_size; ++i){
+		scanf("%lld", &vector[i]);
+	}
 
 	while(test_case--){
-		scanf("%lld %lld", &subvector_extreme.first, &subvector_extreme.second);		// Read the extremes of the subvector
-		scanf("%lld", &drawn_element);								// Number drawn
-		scanf("%lld %lld", &every_move.first, &every_move.second);				// Number chosen by Gugu and Dadriel
+		scanf("%lld %lld", &subvector_pos.first, &subvector_pos.second);	// Read the extremes of the subvector
+		scanf("%lld", &drawn_position);										// Read number drawn
+		scanf("%lld %lld", &every_move.first, &every_move.second);			// Read number chosen by Gugu and Dadriel
 
-		for(j=subvector_extreme.first-1; j<subvector_extreme.second; map[vector[j]]++, ++j);	// Count and sort the subvector
+		for(i=subvector_pos.first-1, j=0; i<subvector_pos.second; ++i, ++j){// 'j' has the size of the subvector
+			subvector[j]=vector[i];
+		}
+		sort(subvector, subvector+j);
 
-		it=map.begin();
-		for(j=it->second; j<drawn_element; ++it, j+=it->second);				// Find the drawn element in the drawn_element position
+		element = subvector[drawn_position - 1];
+		count = counter(subvector, j, drawn_position, element);
 
-		diference.first  = subtraction(every_move.first, it->second);
-		diference.second = subtraction(every_move.second, it->second);
+		diference.first  = subtraction(every_move.first, count);
+		diference.second = subtraction(every_move.second, count);
 
-		if	(diference.first == diference.second)	printf("%lld %lld E\n", it->first, it->second);
-		else if	(diference.first < diference.second)	printf("%lld %lld G\n", it->first, it->second);
-		else						printf("%lld %lld D\n", it->first, it->second);
-
-		map.clear();
+		if		(diference.first == diference.second)	printf("%lld %lld E\n", element, count);
+		else if	(diference.first < diference.second)	printf("%lld %lld G\n", element, count);
+		else											printf("%lld %lld D\n", element, count);
 	}
 }
