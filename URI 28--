@@ -1,0 +1,65 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<unordered_map>
+using namespace std;
+using ll = long long;
+using paird = pair<int, int>;
+
+static ll *numbers;
+
+int subtraction(int &a, int &b)		{return max(a, b) - min(a, b);}
+bool compare(int &a, int &b)		{return numbers[a] < numbers[b];}
+bool between(int &a, int &b, int &c){return a>=b and a<c;}
+
+int main(){
+	int vector_size, test_case;
+	scanf("%d %d", &vector_size, &test_case);
+
+	numbers = new ll[vector_size];
+	ll element;
+	int i=0, k=0, count, drawn_position, ordered_positions[vector_size];
+	paird subvector, movement, diference;
+	unordered_map<ll, vector<int>> counter;
+	unordered_map<ll, vector<int>>::iterator it_counter;
+	vector<int>::iterator it_vector;
+
+	for(i=0; i<vector_size; ++i){
+		scanf("%lld", &numbers[i]);
+		ordered_positions[i]=i;
+		counter[numbers[i]].push_back(i);
+	}
+	sort(ordered_positions, ordered_positions+vector_size, compare);
+
+	while(test_case--){
+		scanf("%d %d", &subvector.first, &subvector.second);	// Read the extremes of the subvector
+		scanf("%d", &drawn_position);							// Read number drawn
+		scanf("%d %d", &movement.first, &movement.second);		// Read number chosen by Gugu and Dadriel
+		subvector.first--;
+
+		for(i=k=0; i<vector_size and k != drawn_position; ++i){	// For the dog to find the smallest k
+			if(between(ordered_positions[i], subvector.first, subvector.second)){
+				++k;
+			}
+		}
+		element = numbers[ordered_positions[i-1]];
+
+		count=0;
+		it_counter = counter.find(element);
+		it_vector = it_counter->second.begin();					//Element k positions in the vector
+		for( ; it_vector != it_counter->second.end() and *it_vector < subvector.first; ++it_vector);
+		for( ; it_vector != it_counter->second.end() and *it_vector < subvector.second;  ++it_vector){
+			if(between(*it_vector, subvector.first, subvector.second)){
+				++count;
+			}
+		}
+
+		diference.first  = subtraction(movement.first, count);
+		diference.second = subtraction(movement.second, count);
+
+		if		(diference.first == diference.second)	printf("%lld %d E\n", element, count);
+		else if	(diference.first < diference.second)	printf("%lld %d G\n", element, count);
+		else											printf("%lld %d D\n", element, count);
+	}
+	delete[] numbers;
+}
