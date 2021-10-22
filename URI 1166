@@ -1,0 +1,40 @@
+#include<iostream>
+#include<cmath>
+#include<unordered_set>
+using namespace std;
+
+static bool proceed;
+static int i, tc, pillar, value, out;
+
+static unordered_set<int> pdPerfectSquare;
+bool isPerfectSquare(int a){
+	if(pdPerfectSquare.find(a) == pdPerfectSquare.end()){
+		float aux1 = float(sqrt(a));
+		if(aux1 != float(int(aux1)))
+			return false;
+	}
+	pdPerfectSquare.insert(a);
+	return true;
+}
+
+int main(){
+	scanf("%d", &tc);
+	while(tc--){
+		scanf("%d", &pillar);
+
+		int pillars[50] = {0};
+		for(proceed=value=1; proceed; ++value){
+			for(i=0; i<pillar and pillars[i-1] != value; ++i){
+				if(!pillars[i] || isPerfectSquare(pillars[i] + value)){
+					out = pillars[i] = value;
+					proceed=true;
+				}
+				else{
+					proceed=false;
+				}
+			}
+		}
+
+		printf("%d\n", out);
+	}
+}
