@@ -1,0 +1,44 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int main(){
+	int f, r, aux, i, j;
+
+	scanf("%d %d", &f, &r);
+	vector<bool> a(f+1, false);
+	vector<int> pos;
+
+	for(i=0; i<r; ++i){
+		scanf("%d", &aux);
+
+		a[aux] = true;
+		pos.push_back(aux);
+	}
+
+	for(i=0; r < f; ++i){
+
+		vector<int> mem;
+		for(j=0; j<pos.size(); ++j){
+
+			aux = pos[j];
+			if(aux-1 > 0 and !a[aux-1]){
+				a[aux-1] = true;
+				mem.push_back(aux-1);
+				++r;
+			}
+			if(aux+1 <= f and !a[aux+1]){
+				a[aux+1] = true;
+				mem.push_back(aux+1);
+				++r;
+			}
+		}
+
+		pos.clear();
+		for(j=0; j< mem.size(); ++j){
+			pos.push_back(mem[j]);
+		}
+	}
+
+	printf("%d\n", i);
+}
